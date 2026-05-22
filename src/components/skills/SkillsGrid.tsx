@@ -3,17 +3,17 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import * as Icons from 'lucide-react';
+import type { LucideProps } from 'lucide-react';
 import { skills } from '@/data/site';
+
+type LucideIcon = React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
 
 export function SkillsGrid() {
   return (
     <section className="py-12 sm:py-16">
       <div className="container-wide space-y-6">
         {skills.map((cat, idx) => {
-          const Icon =
-            (Icons[cat.icon as keyof typeof Icons] as
-              | React.ComponentType<{ size?: number; className?: string }>
-              | undefined) ?? Icons.Sparkles;
+          const Icon = ((Icons[cat.icon as keyof typeof Icons] as unknown) as LucideIcon) ?? Icons.Sparkles;
           return (
             <CategoryCard key={cat.category} idx={idx} Icon={Icon} {...cat} />
           );
@@ -27,7 +27,7 @@ interface CategoryCardProps {
   idx: number;
   category: string;
   items: ReadonlyArray<{ name: string; level: number; tag: string }>;
-  Icon: React.ComponentType<{ size?: number; className?: string }>;
+  Icon: LucideIcon;
 }
 
 function CategoryCard({ idx, category, items, Icon }: CategoryCardProps) {

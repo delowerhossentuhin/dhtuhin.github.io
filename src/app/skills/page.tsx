@@ -8,9 +8,11 @@ export const metadata: Metadata = {
   description: 'Programming, machine learning, web, and research tools.',
 };
 
+type SkillItem = { name: string; level: number; tag: string };
+
 export default function SkillsPage() {
   // small derived stats
-  const allItems = skills.flatMap((s) => s.items);
+  const allItems = (skills as unknown as Array<{ items: SkillItem[] }>).flatMap((s) => s.items);
   const avg = Math.round(allItems.reduce((a, b) => a + b.level, 0) / allItems.length);
 
   return (

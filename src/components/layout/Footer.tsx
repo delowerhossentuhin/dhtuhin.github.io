@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Github, Linkedin, BookOpen, GraduationCap, Mail, Instagram, Facebook } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Github, Linkedin, BookOpen, GraduationCap, Mail, Instagram, Facebook, type LucideProps } from 'lucide-react';
 import { profile } from '@/data/site';
 
 const sitemap = [
@@ -19,7 +19,12 @@ const more = [
 ];
 
 export function Footer() {
-  const pathname = usePathname();
+  const [pathname, setPathname] = useState('');
+
+  useEffect(() => {
+    setPathname(window.location.pathname);
+  }, []);
+
   if (pathname?.startsWith('/admin')) return null;
 
   const year = new Date().getFullYear();
@@ -52,10 +57,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               {sitemap.map((l) => (
                 <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-sm text-ink-200 transition hover:text-white"
-                  >
+                  <Link href={l.href} className="text-sm text-ink-200 transition hover:text-white">
                     {l.label}
                   </Link>
                 </li>
@@ -68,10 +70,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               {more.map((l) => (
                 <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-sm text-ink-200 transition hover:text-white"
-                  >
+                  <Link href={l.href} className="text-sm text-ink-200 transition hover:text-white">
                     {l.label}
                   </Link>
                 </li>
@@ -86,21 +85,9 @@ export function Footer() {
             <div className="mt-4 grid grid-cols-4 gap-2">
               <SocialIcon href={profile.social.github} label="GitHub" icon={Github} />
               <SocialIcon href={profile.social.linkedin} label="LinkedIn" icon={Linkedin} />
-              <SocialIcon
-                href={profile.social.scholar}
-                label="Google Scholar"
-                icon={GraduationCap}
-              />
-              <SocialIcon
-                href={profile.social.researchgate}
-                label="ResearchGate"
-                icon={BookOpen}
-              />
-              <SocialIcon
-                href={profile.social.instagram}
-                label="Instagram"
-                icon={Instagram}
-              />
+              <SocialIcon href={profile.social.scholar} label="Google Scholar" icon={GraduationCap} />
+              <SocialIcon href={profile.social.researchgate} label="ResearchGate" icon={BookOpen} />
+              <SocialIcon href={profile.social.instagram} label="Instagram" icon={Instagram} />
               <SocialIcon href={profile.social.facebook} label="Facebook" icon={Facebook} />
             </div>
             <p className="mt-4 font-mono text-[11px] text-ink-400">
@@ -131,7 +118,7 @@ function SocialIcon({
 }: {
   href: string;
   label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>>;
 }) {
   return (
     <a
